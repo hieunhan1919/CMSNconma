@@ -71,12 +71,12 @@
             height: 100vh;
             object-fit: cover;
             opacity: 0;
-            z-index: 1000;
-            transition: opacity 2s ease-in-out;
+            z-index: 0; /* Thay đổi z-index để ảnh ở dưới cùng */
         }
 
         .full-screen-image.active {
             opacity: 1;
+            z-index: 1; /* Đưa ảnh lên trên khi hiển thị */
         }
 
         @keyframes fadeIn {
@@ -105,6 +105,44 @@
                 opacity: 0;
             }
         }
+
+        /* Ô nhập điều ước */
+        .wish-input {
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            z-index: 2; /* Đặt ô nhập lên trên cùng */
+            margin-top: 20px;
+        }
+
+        .wish-input input {
+            padding: 10px;
+            font-size: 1em;
+            margin-bottom: 10px;
+            border-radius: 5px;
+            border: 1px solid #ccc;
+            width: 80%;
+            max-width: 300px; /* Giới hạn độ rộng tối đa */
+        }
+
+        .wish-input button {
+            padding: 10px 20px;
+            font-size: 1em;
+            cursor: pointer;
+            background-color: #28a745;
+            border: none;
+            border-radius: 5px;
+            color: white;
+        }
+
+        .wish-input button:hover {
+            background-color: #218838;
+        }
+
+        /* Ẩn tất cả các phần tử khác */
+        .hidden {
+            display: none;
+        }
     </style>
 </head>
 <body>
@@ -122,6 +160,15 @@
 
     <!-- Ảnh full màn hình -->
     <img src="ma.jpg" alt="Fullscreen Image" class="full-screen-image">
+
+    <audio id="backgroundMusic" src="nhachp.mp3" autoplay hidden></audio>
+    <audio id="finalMusic" src="nhacma.mp3" hidden></audio>
+
+    <!-- Ô nhập điều ước -->
+    <div class="wish-input">
+        <input type="text" id="wishInput" placeholder="Ước đi Na rồi nhấn nút !">
+        <button onclick="makeWish()">Gửi điều ước</button>
+    </div>
 
     <script>
         // Tạo hiệu ứng pháo hoa rơi từ trên xuống
@@ -155,10 +202,25 @@
 
         // Sau khi hiện 3 ảnh, hiển thị ảnh full màn hình
         const fullScreenImage = document.querySelector('.full-screen-image');
-        setTimeout(() => {
+        const backgroundMusic = document.getElementById('backgroundMusic');
+        const finalMusic = document.getElementById('finalMusic');
+
+        function makeWish() {
             clearInterval(imageInterval); // Dừng chuyển đổi ảnh
-            fullScreenImage.classList.add('active'); // Hiện ảnh full màn hình
-        }, 15000); // Sau 15 giây (3 ảnh, mỗi ảnh 5 giây)
+            fullScreenImage.classList.add('active'); // Hiện ảnh full màn hình ngay lập tức
+
+            // Ẩn tất cả các phần tử khác
+            document.querySelector('h1').classList.add('hidden');
+            document.querySelector('h2').classList.add('hidden');
+            document.querySelector('.wish-input').classList.add('hidden');
+
+            // Dừng nhạc nền và phát nhạc mới
+            backgroundMusic.pause();
+            backgroundMusic.currentTime = 0;
+            finalMusic.play();
+        }
+
     </script>
+
 </body>
 </html>
