@@ -1,0 +1,164 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Chúc mừng sinh nhật!</title>
+    <style>
+        /* Căn chỉnh chung */
+        body {
+            margin: 0;
+            background-color: #000;
+            color: white;
+            height: 100vh;
+            display: flex;
+            flex-direction: column;
+            justify-content: space-evenly;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        h1, h2 {
+            margin: 0;
+            text-align: center;
+            opacity: 0;
+            animation: fadeIn 2s forwards;
+            z-index: 2;
+        }
+
+        h1 {
+            font-size: 3em;
+            animation-delay: 0.5s;
+        }
+
+        h2 {
+            font-size: 1.5em;
+            animation-delay: 2s;
+        }
+
+        /* Phần chứa ảnh */
+        .image-container {
+            position: relative;
+            width: 80%;
+            max-width: 800px;
+            height: 40vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            overflow: hidden;
+        }
+
+        .image-container img {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            opacity: 0;
+            transition: opacity 2s ease-in-out;
+        }
+
+        /* Hiển thị ảnh theo thứ tự */
+        .image-container img.active {
+            opacity: 1;
+        }
+
+        /* Ảnh full màn hình */
+        .full-screen-image {
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100vw;
+            height: 100vh;
+            object-fit: cover;
+            opacity: 0;
+            z-index: 1000;
+            transition: opacity 2s ease-in-out;
+        }
+
+        .full-screen-image.active {
+            opacity: 1;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; }
+            to { opacity: 1; }
+        }
+
+        .firework {
+            position: fixed;
+            top: -10px;
+            width: 15px;
+            height: 15px;
+            background-color: red;
+            border-radius: 50%;
+            animation: fall 3s linear infinite;
+            z-index: 1;
+        }
+
+        @keyframes fall {
+            0% {
+                transform: translateY(0);
+                opacity: 1;
+            }
+            100% {
+                transform: translateY(100vh);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Dòng chữ chúc mừng -->
+    <h1>🎉 Chúc mừng sinh nhật! 🎉</h1>
+    <h2>Chúc Tina luôn xinh đẹp và bớt xàm!</h2>
+
+    <!-- Phần hiển thị ảnh -->
+    <div class="image-container">
+        <img src="1.jpg" alt="Image 1" class="active">
+        <img src="2.jpg" alt="Image 2">
+        <img src="3.jpg" alt="Image 3">
+    </div>
+
+    <!-- Ảnh full màn hình -->
+    <img src="ma.jpg" alt="Fullscreen Image" class="full-screen-image">
+
+    <script>
+        // Tạo hiệu ứng pháo hoa rơi từ trên xuống
+        function createFirework() {
+            const firework = document.createElement('div');
+            firework.classList.add('firework');
+            firework.style.left = Math.random() * 100 + 'vw';
+            firework.style.width = firework.style.height = Math.random() * 15 + 10 + 'px';
+            firework.style.backgroundColor = `hsl(${Math.random() * 360}, 100%, 50%)`;
+            document.body.appendChild(firework);
+
+            setTimeout(() => {
+                firework.remove();
+            }, 3000);
+        }
+
+        // Tạo pháo hoa dày đặc hơn mỗi 100ms
+        setInterval(createFirework, 100);
+
+        // Chuyển đổi hình ảnh dần dần
+        const images = document.querySelectorAll('.image-container img');
+        let currentImageIndex = 0;
+
+        function showNextImage() {
+            images[currentImageIndex].classList.remove('active');
+            currentImageIndex = (currentImageIndex + 1) % images.length;
+            images[currentImageIndex].classList.add('active');
+        }
+
+        const imageInterval = setInterval(showNextImage, 5000);
+
+        // Sau khi hiện 3 ảnh, hiển thị ảnh full màn hình
+        const fullScreenImage = document.querySelector('.full-screen-image');
+        setTimeout(() => {
+            clearInterval(imageInterval); // Dừng chuyển đổi ảnh
+            fullScreenImage.classList.add('active'); // Hiện ảnh full màn hình
+        }, 15000); // Sau 15 giây (3 ảnh, mỗi ảnh 5 giây)
+    </script>
+</body>
+</html>
